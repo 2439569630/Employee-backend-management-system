@@ -26,7 +26,7 @@
             <el-menu-item index="2_2" @click="click('2_2')">西凉产品部</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
-        <el-sub-menu index="3"> 亲爱的群多群多群 签到去
+        <el-sub-menu index="3"> 
           <template #title>
             <span>销售部</span>
           </template>
