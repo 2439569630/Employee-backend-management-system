@@ -7,31 +7,12 @@
         default-active="2"
         text-color="#fff" 
       >
-        <el-sub-menu index="1">
+        <el-sub-menu :index=iten.id.toString() v-for="iten in data">
           <template #title>
-            <span>财务部</span>
+            <span>{{ iten.name }}</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1_1" @click="click('1_1')">武汉财务部</el-menu-item>
-            <el-menu-item index="1_2" @click="click('1_2')">徐州财务部</el-menu-item>
-            <el-menu-item index="1_3" @click="click('1_3')">北京财务部</el-menu-item>
-          </el-menu-item-group>
-        </el-sub-menu>
-        <el-sub-menu index="2">
-          <template #title>
-            <span>产品部</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="2_1" @click="click('2_1')">南昌产品部</el-menu-item>
-            <el-menu-item index="2_2" @click="click('2_2')">西凉产品部</el-menu-item>
-          </el-menu-item-group>
-        </el-sub-menu>
-        <el-sub-menu index="3"> 
-          <template #title>
-            <span>销售部</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="3_1" @click="click('3_1')">深圳销售部</el-menu-item>
+            <el-menu-item :index=iten_sub.id.toString() v-for="iten_sub in iten.sub" @click="click(iten_sub.id)">{{ iten_sub.name }}</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
       </el-menu>
@@ -41,39 +22,70 @@
 <script setup>
 import router from '../../../router';
 import {ref} from 'vue'
-const data = ref([
+const data = [
   {
     id: 1,
-    name: '财务部',
-    super: 0
+    name: "财务部",
+    super: 0,
+    sub: [
+      {
+        id: 4,
+        name: "武汉财务部",
+        super: 0
+      },
+      {
+        id: 5,
+        name: "武中财务部",
+        super: 0
+      },
+    ],
   },
   {
     id: 2,
-    name: '产品部',
-    super: 0
+    name: "人事部",
+    super: 0,
+    sub: [
+      {
+        id: 6,
+        name: "武汉人事部",
+        super: 0
+      },
+      {
+        id: 7,
+        name: "武中人事部",
+        super: 0
+      },
+    ],
   },
   {
     id: 3,
-    name: '销售部',
-    super: 0
+    name: "技术部",
+    super: 0,
+    sub: [
+      {
+        id: 8,
+        name: "武汉技术部",
+        super: 0
+      },
+      {
+        id: 9,
+        name: "武中技术部",
+        super: 0
+      },
+    ],
   },
-  {
-    id: 4,
-    name: '财务部',
-    super: 1
-  },
-])
-const url = {
-  '1_1': '/whcwb',
-  '1_2': '/bjcwb',
-  '1_3': '/xzcwb',
-  '2_1': '/nccpb',
-  '2_2': '/xlcpb',
-  '3_1': '/szxsb'
-}
+];
+
+// const url = {
+//   '1_1': '/whcwb',
+//   '1_2': '/bjcwb',
+//   '1_3': '/xzcwb',
+//   '2_1': '/nccpb',
+//   '2_2': '/xlcpb',
+//   '3_1': '/szxsb'
+// }
 const click = (i) => {
-  router.push(url[i])
-  console.log(url[i]);
+  router.push('/uesdata/' + i)
 }
 </script>
 <style scoped>

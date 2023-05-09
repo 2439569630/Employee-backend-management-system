@@ -7,6 +7,6 @@ h1 {
     left: 25vw;
     right: 25vw;
     text-align: center;
-    
+    color: #ffffff;
 }
 </style>
