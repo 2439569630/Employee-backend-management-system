@@ -79,11 +79,11 @@ const vl = ref()
 const dj = (i) => {
     if(vl.value === null || vl.value == 0){
         vl.value = [0]
-        console.log('显示所有');
+        // console.log('显示所有');
         emit('tabulation', vl.value)
     }
     else{
-        console.log('显示:' + vl.value);
+        // console.log('显示:' + vl.value);
         emit('tabulation', vl.value)
     }
     

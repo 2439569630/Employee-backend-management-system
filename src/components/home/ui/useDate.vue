@@ -1,6 +1,6 @@
 <template>
-    <component @clickChild="getChildInfo" @tabulation="list" ></component>
-    <bodydata :msg="time" :post="listshuju"></bodydata>
+    <component @clickChild="getChildInfo" @tabulation="list"></component>
+    <bodydata :msg="time" @update="update_Data" :post="listshuju"></bodydata>
 </template>
 <script setup>
 import component from './useDate/header.vue'
@@ -21,9 +21,8 @@ let time = ref()
 
 
 // 这里由子组件发来的进行岗位的筛查
-const list = (params)=> {
+const list = (params) => {
     listshuju.value = params[0]
-    // console.log(listshuju);
 
 }
 
@@ -31,9 +30,24 @@ const list = (params)=> {
 
 
 // 处理component组件发来要搜索的数据
-const getChildInfo = (params)=> {
+const getChildInfo = (params) => {
     console.log(params.value);
-    
+
+}
+
+// 子组件用来提醒更新数据
+const update_Data = (params) => {
+    axios.get('http://192.168.31.80:9999/data?id=' + route.params.id)
+        .then((response) => {
+            // 更新数据
+            time.value = response.data
+        })
+        .catch((error) => {
+            ElMessage({
+                type: 'error',
+                message: '数据更新失败',
+            })
+        })
 }
 
 
@@ -52,7 +66,7 @@ onMounted(() => {
     console.log('举例来说，mounted 钩子可以用来在组件完成初始渲染并创建 DOM 节点后运行代码');
     console.log(route.params.id);
     time.value = [
-        
+
     ]
     axios.get('http://192.168.31.80:9999/data?id=' + route.params.id,)
         .then(function (response) {
@@ -71,9 +85,9 @@ onMounted(() => {
 onBeforeMount(() => {
     console.log('注册一个钩子，在组件被挂载之前被调用。');
     if (route.params.id) {
-        
+
     }
-    
+
 })
 
 
@@ -92,7 +106,7 @@ watch(() => route.params.id, () => {
             // 处理错误情况
             console.log(error);
         })
-        
+
 
 
     // console.log(time.msg);

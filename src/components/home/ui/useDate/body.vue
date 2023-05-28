@@ -50,7 +50,7 @@
         <el-cascader :options="options" placeholder="选择岗位" @change="dj()" v-model="dialogFormVisibleData.post_name" />
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input v-model="dialogFormVisibleData.textarea" :rows="2" type="textarea" placeholder="备注" />
+        <el-input v-model="dialogFormVisibleData.textarea" :rows="2"  type="textarea" placeholder="备注" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -64,12 +64,15 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref, watch, defineProps, getCurrentInstance, reactive, onMounted } from 'vue';
+
+import { ref, watch, defineProps, getCurrentInstance, reactive, onMounted, defineEmits } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRoute } from 'vue-router';
 import { objectPick } from '@vueuse/shared';
 // import { arrow } from '@popperjs/core';
 
+
+const emit = defineEmits(['update'])
 
 
 const complete = () => {
@@ -77,29 +80,31 @@ const complete = () => {
   const requiredFieldsNotEmpty = requiredFields.every(field => dialogFormVisibleData[field] !== '' && dialogFormVisibleData[field] !== null);
   if (requiredFieldsNotEmpty) {
     const url = 'http://192.168.31.80:9999/modify'
-    const params = { id: dialogFormVisibleData.id, name: dialogFormVisibleData.name, region: dialogFormVisibleData.region, birthday: dialogFormVisibleData.birthday, post_name: dialogFormVisibleData.post_name, textarea: dialogFormVisibleData.textarea}
+    const params = { id: dialogFormVisibleData.id, name: dialogFormVisibleData.name, region: dialogFormVisibleData.region, birthday: dialogFormVisibleData.birthday, post_name: dialogFormVisibleData.post_name, textarea: dialogFormVisibleData.textarea }
     // console.log(dialogFormVisibleData.post_name[0]);
     axios.get(url, { params })
-    .then((response) => {
-      ElMessage({
-            type: 'success',
-            message: response.data.msg,
-          })
-    })
-    .catch((error) => {
-      console.log(error.response.data.msg);
-      ElMessage({
-        type: 'error',
-        message: error.response.data.msg,
+      .then((response) => {
+        // 提示父组件更新数据
+        emit('update', 200)
+        ElMessage({
+          type: 'success',
+          message: response.data.msg,
+        })
       })
-    })
+      .catch((error) => {
+        console.log(error.response.data.msg);
+        ElMessage({
+          type: 'error',
+          message: error.response.data.msg,
+        })
+      })
     dialogFormVisible.value = false
-    
+
   } else {
     ElMessage({
-        type: 'error',
-        message: '参数不能为空',
-      })
+      type: 'error',
+      message: '参数不能为空',
+    })
   }
 }
 // setInterval(()=>{
@@ -128,7 +133,7 @@ const dialogFormVisibleData = reactive({
   birthday: '',
   post_name: '',
   textarea: ''
-}) 
+})
 const formLabelWidth = '140px'
 const form = reactive({
   name: '',
@@ -211,22 +216,11 @@ const handleDelete = (id) => {
             type: 'success',
             message: response.data.msg,
           })
-          // 进行数据更新
-          axios.get('http://192.168.31.80:9999/data?id=' + route.params.id,)
-            .then(function (response) {
-              // 处理成功情况
-              tableData.value = response.data
-              console.log(response.data);
-            })
-            .catch(function (error) {
-              // 处理错误情况
-              ElMessage({
-                type: 'error',
-                message: '数据更新失败',
-              })
-            })
+          // 提示父组件更新数据
+          emit('update', 200)
         })
         .catch((error) => {
+          console.log(error);
           ElMessage({
             type: 'error',
             message: '删除失败1',
@@ -246,10 +240,12 @@ const handleDelete = (id) => {
 
 // 接收父组件的内容
 const props = defineProps({
+  // msg是表的数据
   msg: {
     type: [Object, String],
     default: ''
   },
+  // 这里表示要筛选显示哪个岗位
   post: {
     type: [Number, String],
     default: 0
@@ -257,28 +253,44 @@ const props = defineProps({
 })
 
 
-
 watch(
   () => props.post,
   (newVal) => {
     if (newVal === 0) {
+      // 这里的等于0代表着显示全部并不需要筛选就直接给数据就好
       return tableData.value = props.msg
     }
-    tableData.value = []
-    props.msg.forEach(element => {
-      if (element['poid'] === newVal) {
-        tableData.value.push(element)
-      }
-    })
+    else {
+      // 这里代表着需要筛选
+      tableData.value = []
+      props.msg.forEach(element => {
+        if (element['poid'] === newVal) {
+          tableData.value.push(element)
+        }
+      })
+    }
+
   }
 )
 
-// 更改列表的值
+// 刷新表的数据，数据从父组件来
 watch(
   () => props.msg,
   (newVal) => {
-    tableData.value = newVal
-    // console.log(tableData)
+    console.log("岗位筛选：" + props.post);
+    // 先判断筛选岗位的是否需要筛选，不要直接给数据
+    // 这样点击其他部门时筛选依然生效
+    if (props.post === 0) {
+      tableData.value = newVal
+    }
+    else {
+      tableData.value = []
+      props.msg.forEach(element => {
+        if (element['poid'] === props.post) {
+          tableData.value.push(element)
+        }
+      })
+    }
   }
 )
 
@@ -307,4 +319,6 @@ watch(
   position: absolute;
   margin-left: -78px;
 }
+
+
 </style>
