@@ -21,69 +21,30 @@
 </template>
 <script setup>
 import router from '../../../router';
-import {ref} from 'vue'
-const data = [
-  {
-    id: 1,
-    name: "财务部",
-    super: 0,
-    sub: [
-      {
-        id: 4,
-        name: "武汉财务部",
-        super: 0
-      },
-      {
-        id: 5,
-        name: "武中财务部",
-        super: 0
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "人事部",
-    super: 0,
-    sub: [
-      {
-        id: 6,
-        name: "武汉人事部",
-        super: 0
-      },
-      {
-        id: 7,
-        name: "武中人事部",
-        super: 0
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "技术部",
-    super: 0,
-    sub: [
-      {
-        id: 8,
-        name: "武汉技术部",
-        super: 0
-      },
-      {
-        id: 9,
-        name: "武中技术部",
-        super: 0
-      },
-    ],
-  },
-];
+import {ref, getCurrentInstance, onMounted} from 'vue'
+import { reactify } from '@vueuse/shared';
 
-// const url = {
-//   '1_1': '/whcwb',
-//   '1_2': '/bjcwb',
-//   '1_3': '/xzcwb',
-//   '2_1': '/nccpb',
-//   '2_2': '/xlcpb',
-//   '3_1': '/szxsb'
-// }
+// 调用axios，使用全局的axios
+const internalInstance = getCurrentInstance();
+const axios = internalInstance.appContext.config.globalProperties.$axios;
+const data = ref([])
+// 注册一个回调函数，在组件挂载完成后执行。
+onMounted(() => {
+  axios.get('http://192.168.31.80:9999/list',)
+        .then(function (response) {
+            // 处理成功情况
+            // console.log(response.data);
+            data.value = response.data
+        })
+        .catch(function (error) {
+            // 处理错误情况
+            console.log(error);
+        })
+        .then(function () {
+            // 总是会执行
+        });
+})
+
 const click = (i) => {
   router.push('/uesdata/' + i)
 }

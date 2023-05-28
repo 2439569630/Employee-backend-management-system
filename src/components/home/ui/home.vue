@@ -43,5 +43,6 @@
         left: 20vw;
         right: 0;
         bottom: 0;
+        background-color: #F5F5F5;
     }
 </style>
