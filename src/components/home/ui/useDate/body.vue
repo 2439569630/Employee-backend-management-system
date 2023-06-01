@@ -11,7 +11,7 @@
         <template #default="scope">
           <!-- @click="handleEdit(scope.$index, scope.row) -->
           <el-button size="small" @click="dialogFormVisible = true; dialogFormVisibleEvent(scope.row)">修改</el-button>
-          <el-button size="small" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="small" type="danger"  @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -20,16 +20,9 @@
 
   <el-dialog v-model="dialogFormVisible" center align-center modal title="修改信息">
     <el-form :model="dialogFormVisibleData">
-
       <el-form-item label="id" :label-width="formLabelWidth">
         <el-input v-model="dialogFormVisibleData.id" disabled placeholder="0" />
       </el-form-item>
-      <!-- <el-form-item label="id" :label-width="formLabelWidth">
-        <el-input v-model="dialogFormVisibleData.id" disabled placeholder="0" />
-      </el-form-item> -->
-
-
-
       <el-form-item label="姓名" :label-width="formLabelWidth">
         <span class="required1">*</span>
         <el-input v-model="dialogFormVisibleData.name" width="10" autocomplete="off" />
@@ -50,7 +43,7 @@
         <el-cascader :options="options" placeholder="选择岗位" @change="dj()" v-model="dialogFormVisibleData.post_name" />
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input v-model="dialogFormVisibleData.textarea" :rows="2"  type="textarea" placeholder="备注" />
+        <el-input v-model="dialogFormVisibleData.textarea" :rows="10" type="textarea" placeholder="备注" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -70,6 +63,31 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRoute } from 'vue-router';
 import { objectPick } from '@vueuse/shared';
 // import { arrow } from '@popperjs/core';
+import { ElLoading } from 'element-plus'
+
+
+// 接收父组件的内容
+const props = defineProps({
+  // msg是表的数据
+  msg: {
+    type: [Object, String],
+    default: ''
+  },
+  // 这里表示要筛选显示哪个岗位
+  post: {
+    type: [Number, String],
+    default: 0
+  },
+  search_for: {
+    type: [Number, String, Object],
+    default: 0
+
+  }
+})
+
+
+
+
 
 
 const emit = defineEmits(['update'])
@@ -79,7 +97,7 @@ const complete = () => {
   const requiredFields = ['id', 'name', 'region', 'birthday'];
   const requiredFieldsNotEmpty = requiredFields.every(field => dialogFormVisibleData[field] !== '' && dialogFormVisibleData[field] !== null);
   if (requiredFieldsNotEmpty) {
-    const url = 'http://192.168.31.80:9999/modify'
+    const url = 'http://htyg.bbqll.xyz/modify'
     const params = { id: dialogFormVisibleData.id, name: dialogFormVisibleData.name, region: dialogFormVisibleData.region, birthday: dialogFormVisibleData.birthday, post_name: dialogFormVisibleData.post_name, textarea: dialogFormVisibleData.textarea }
     // console.log(dialogFormVisibleData.post_name[0]);
     axios.get(url, { params })
@@ -90,6 +108,7 @@ const complete = () => {
           type: 'success',
           message: response.data.msg,
         })
+
       })
       .catch((error) => {
         console.log(error.response.data.msg);
@@ -119,7 +138,6 @@ const dialogFormVisibleEvent = (ListData) => {
   dialogFormVisibleData.birthday = ListData.birthday
   dialogFormVisibleData.post_name = ListData.poid
   dialogFormVisibleData.textarea = ListData.other
-  console.log(ListData.poid);
 
 }
 // 由于选定时返回的是对象，这里需要处理下不能是对象，要的是数字
@@ -149,7 +167,7 @@ const form = reactive({
 const options = ref([])
 // onMounted 钩子可以用来在组件完成初始渲染并创建 DOM 节点后运行代码
 onMounted(() => {
-  axios.get('http://192.168.31.80:9999/post')
+  axios.get('http://htyg.bbqll.xyz/post')
     .then((req) => {
       options.value = req.data
       console.log(options.value);
@@ -209,7 +227,7 @@ const handleDelete = (id) => {
   )
     .then(() => {
       // http://127.0.0.1:9999/delete?delete=
-      axios.get('http://192.168.31.80:9999/delete?delete=' + id.id)
+      axios.get('http://htyg.bbqll.xyz/delete?delete=' + id.id)
         .then((response) => {
           // 删除成功响应
           ElMessage({
@@ -238,21 +256,9 @@ const handleDelete = (id) => {
 
 
 
-// 接收父组件的内容
-const props = defineProps({
-  // msg是表的数据
-  msg: {
-    type: [Object, String],
-    default: ''
-  },
-  // 这里表示要筛选显示哪个岗位
-  post: {
-    type: [Number, String],
-    default: 0
-  }
-})
 
 
+// 岗位的筛选
 watch(
   () => props.post,
   (newVal) => {
@@ -263,36 +269,164 @@ watch(
     else {
       // 这里代表着需要筛选
       tableData.value = []
-      props.msg.forEach(element => {
-        if (element['poid'] === newVal) {
-          tableData.value.push(element)
-        }
-      })
+      // 这里继续判断这次筛选看看搜索框里是否有内容，如果有那就把搜索框要搜索的姓名也加上
+      if (props.search_for['text']) {
+        console.log('搜索框有内容')
+        props.msg.forEach((element) => {
+          // 先判断是否有这个员工的名称，在判断有没有这个岗位
+          if (element['name'].includes(props.search_for['text'])) {
+            if (element['poid'] === newVal) {
+              tableData.value.push(element)
+            }
+          }
+        })
+      }
+      else {
+        props.msg.forEach(element => {
+          if (element['poid'] === newVal) {
+            tableData.value.push(element)
+          }
+        })
+      }
     }
 
   }
 )
 
-// 刷新表的数据，数据从父组件来
+// 监听 props.msg 的变化，根据岗位和搜索框的内容对数据进行筛选
+// 更新 tableData.value 数组中的数据
 watch(
   () => props.msg,
   (newVal) => {
-    console.log("岗位筛选：" + props.post);
-    // 先判断筛选岗位的是否需要筛选，不要直接给数据
-    // 这样点击其他部门时筛选依然生效
+    // 清空 tableData.value 数组
+    tableData.value = []
+    // 如果岗位为全部，不需要按岗位筛选
     if (props.post === 0) {
-      tableData.value = newVal
+      if (props.search_for['text']) {
+        // 如果搜索框有内容，只保留名称中包含搜索框内容的元素
+        console.log('岗位为全部，搜索框筛选')
+        props.msg.forEach((element) => {
+          if (element['name'].includes(props.search_for['text'])) {
+            // 把符合条件的元素添加到 tableData.value 数组中
+            tableData.value.push(element)
+          }
+        })
+      }
+      else {
+        // 如果搜索框为空，直接把 props.msg 的所有元素添加到 tableData.value 数组中
+        tableData.value = props.msg
+      }
     }
     else {
-      tableData.value = []
-      props.msg.forEach(element => {
-        if (element['poid'] === props.post) {
-          tableData.value.push(element)
-        }
-      })
+      // 如果岗位不为全部，需要按岗位筛选
+      if (props.search_for['text']) {
+        // 如果搜索框有内容，需要同时按名称和岗位筛选
+        props.msg.forEach(element => {
+          if (element['name'].includes(props.search_for['text'])) {
+            // 如果名称包含搜索框内容，再判断岗位是否相同
+            if (element['poid'] === props.post) {
+              // 如果岗位相同，把符合条件的元素添加到 tableData.value 数组中
+              tableData.value.push(element)
+            }
+          }
+        })
+      }
+      else {
+        // 如果搜索框为空，只按岗位筛选
+        props.msg.forEach(element => {
+          if (element['poid'] === props.post) {
+            // 如果岗位相同，把符合条件的元素添加到 tableData.value 数组中
+            tableData.value.push(element)
+          }
+        })
+      }
     }
   }
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// search_for
+// 这里是处理要搜索框要搜索的
+watch(
+  () => props.search_for,
+  (newVal) => {
+    // 提示父组件更新数据
+    emit('update', 200)
+    // 打印出搜索框的内容
+    console.log(newVal['text'])
+    // 先清空表数据
+    tableData.value = []
+    if (newVal['text'] === null) {
+      // 如果搜索框为空，不需要按名称筛选
+      if (props.post === 0) {
+        // 如果岗位为全部，直接把 props.msg 的所有元素添加到 tableData.value 数组中
+        tableData.value = props.msg
+      }
+      else {
+        // 如果岗位不为全部，只按岗位筛选
+        props.msg.forEach((element) => {
+          if (element['poid'] === props.post) {
+            // 如果岗位相同，把符合条件的元素添加到 tableData.value 数组中
+            tableData.value.push(element)
+          }
+        })
+      }
+    }
+    else {
+      // 如果搜索框有内容，需要按名称筛选
+      console.log('搜索框有内容，岗位为全部');
+      if (props.post === 0) {
+        // 如果岗位为全部，不需要按岗位筛选
+        props.msg.forEach((element) => {
+          if (element['name'].includes(newVal['text'])) {
+            // 如果名称包含搜索框内容，把符合条件的元素添加到 tableData.value 数组中
+            tableData.value.push(element)
+          }
+        })
+      }
+      else {
+        // 如果岗位不为全部，需要同时按名称和岗位筛选
+        props.msg.forEach((element) => {
+          if (element['poid'] === props.post) {
+            // 如果岗位相同，再判断名称是否包含搜索框内容
+            if (element['name'].includes(newVal['text'])) {
+              // 如果名称包含搜索框内容，把符合条件的元素添加到 tableData.value 数组中
+              tableData.value.push(element)
+            }
+          }
+        })
+      }
+    }
+  }
+)
+
 
 
 
@@ -319,6 +453,4 @@ watch(
   position: absolute;
   margin-left: -78px;
 }
-
-
 </style>

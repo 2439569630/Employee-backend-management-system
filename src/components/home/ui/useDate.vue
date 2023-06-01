@@ -1,6 +1,6 @@
 <template>
-    <component @clickChild="getChildInfo" @tabulation="list"></component>
-    <bodydata :msg="time" @update="update_Data" :post="listshuju"></bodydata>
+    <component @clickChild="getChildInfo" @update="update_Data" @tabulation="list"></component>
+    <bodydata :msg="time" @update="update_Data" :search_for="cd" :post="listshuju"></bodydata>
 </template>
 <script setup>
 import component from './useDate/header.vue'
@@ -15,6 +15,8 @@ const route = useRoute();
 const routeParams = ref(route.params)
 
 const listshuju = ref()
+// 记录要搜索的内容
+const cd = ref()
 
 
 let time = ref()
@@ -23,7 +25,6 @@ let time = ref()
 // 这里由子组件发来的进行岗位的筛查
 const list = (params) => {
     listshuju.value = params[0]
-
 }
 
 
@@ -31,13 +32,14 @@ const list = (params) => {
 
 // 处理component组件发来要搜索的数据
 const getChildInfo = (params) => {
-    console.log(params.value);
+    // console.log(params.value);
+    cd.value = params
 
 }
 
 // 子组件用来提醒更新数据
 const update_Data = (params) => {
-    axios.get('http://192.168.31.80:9999/data?id=' + route.params.id)
+    axios.get('http://htyg.bbqll.xyz/data?id=' + route.params.id)
         .then((response) => {
             // 更新数据
             time.value = response.data
@@ -68,7 +70,7 @@ onMounted(() => {
     time.value = [
 
     ]
-    axios.get('http://192.168.31.80:9999/data?id=' + route.params.id,)
+    axios.get('http://htyg.bbqll.xyz/data?id=' + route.params.id,)
         .then(function (response) {
             // 处理成功情况
             time.value = response.data
@@ -97,7 +99,7 @@ onBeforeMount(() => {
 // 监听路由来更新数据
 watch(() => route.params.id, () => {
     time.value = []
-    axios.get('http://192.168.31.80:9999/data?id=' + route.params.id,)
+    axios.get('http://htyg.bbqll.xyz/data?id=' + route.params.id,)
         .then(function (response) {
             // 处理成功情况
             time.value = response.data
