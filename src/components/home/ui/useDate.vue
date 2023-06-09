@@ -6,7 +6,8 @@
 import component from './useDate/header.vue'
 import bodydata from './useDate/body.vue'
 import { useRoute } from 'vue-router';
-import { ref, watch, onMounted, onBeforeMount, getCurrentInstance } from 'vue';
+import { ref, watch, onMounted, onBeforeMount, getCurrentInstance } from 'vue'
+import url from './../../../db/db'
 // 调用axios，使用全局的axios
 const internalInstance = getCurrentInstance();
 const axios = internalInstance.appContext.config.globalProperties.$axios;
@@ -20,6 +21,7 @@ const cd = ref()
 
 
 let time = ref()
+console.log(url.al(222222))
 
 
 // 这里由子组件发来的进行岗位的筛查
@@ -52,6 +54,8 @@ const update_Data = (params) => {
         })
 }
 
+const a = () => { 
+        
 
 
 const postFontSize = ref(1)
