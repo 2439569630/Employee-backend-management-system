@@ -108,7 +108,7 @@ const complete = () => {
     })
     // console.log('state:' + state)
     if (state) {
-        const url = 'http://htyg.bbqll.xyz/adddata?'
+        const url = url.url + '/adddata?'
         const data = 'name=' + name + '&sex= ' + sex + '&birthday=' + birthday + '&poid=' + poid + '&seid=' + seid + '&textarea=' + textarea
         axios.get(url + data)
             .then((res) => {
@@ -146,7 +146,7 @@ const complete = () => {
 onMounted(() => {
     // 筛选的默认选着全部岗位
     vl.value = 0
-    axios.get('http://htyg.bbqll.xyz/post')
+    axios.get( url.url + '/post')
         .then((req) => {
             // 在这里需要添加一个 ‘所有岗位’
             add_options.value = req.data
