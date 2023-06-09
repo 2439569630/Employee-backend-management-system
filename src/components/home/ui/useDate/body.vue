@@ -64,6 +64,7 @@ import { useRoute } from 'vue-router';
 import { objectPick } from '@vueuse/shared';
 // import { arrow } from '@popperjs/core';
 import { ElLoading } from 'element-plus'
+import urlconfig from './../../../../db/db'
 
 
 // 接收父组件的内容
@@ -97,7 +98,7 @@ const complete = () => {
   const requiredFields = ['id', 'name', 'region', 'birthday'];
   const requiredFieldsNotEmpty = requiredFields.every(field => dialogFormVisibleData[field] !== '' && dialogFormVisibleData[field] !== null);
   if (requiredFieldsNotEmpty) {
-    const url = 'http://htyg.bbqll.xyz/modify'
+    const url = urlconfig.url + '/modify'
     const params = { id: dialogFormVisibleData.id, name: dialogFormVisibleData.name, region: dialogFormVisibleData.region, birthday: dialogFormVisibleData.birthday, post_name: dialogFormVisibleData.post_name, textarea: dialogFormVisibleData.textarea }
     // console.log(dialogFormVisibleData.post_name[0]);
     axios.get(url, { params })
@@ -167,10 +168,10 @@ const form = reactive({
 const options = ref([])
 // onMounted 钩子可以用来在组件完成初始渲染并创建 DOM 节点后运行代码
 onMounted(() => {
-  axios.get('http://htyg.bbqll.xyz/post')
+  axios.get(urlconfig.url + '/post')
     .then((req) => {
       options.value = req.data
-      console.log(options.value);
+      console.table(options.value)
     })
     .catch((error) => {
       ElMessage({
@@ -226,8 +227,7 @@ const handleDelete = (id) => {
     }
   )
     .then(() => {
-      // http://127.0.0.1:9999/delete?delete=
-      axios.get('http://htyg.bbqll.xyz/delete?delete=' + id.id)
+      axios.get(urlconfig.url + '/delete?delete=' + id.id)
         .then((response) => {
           // 删除成功响应
           ElMessage({

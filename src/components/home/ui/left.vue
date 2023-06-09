@@ -23,14 +23,14 @@
 import router from '../../../router';
 import {ref, getCurrentInstance, onMounted} from 'vue'
 import { reactify } from '@vueuse/shared';
-
+import url from './../../../db/db'
 // 调用axios，使用全局的axios
 const internalInstance = getCurrentInstance();
 const axios = internalInstance.appContext.config.globalProperties.$axios;
 const data = ref([])
 // 注册一个回调函数，在组件挂载完成后执行。
 onMounted(() => {
-  axios.get('http://192.168.31.80:9999/list',)
+  axios.get(url.url + '/list',)
         .then(function (response) {
             // 处理成功情况
             // console.log(response.data);

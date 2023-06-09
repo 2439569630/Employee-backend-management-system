@@ -7,7 +7,7 @@ import component from './useDate/header.vue'
 import bodydata from './useDate/body.vue'
 import { useRoute } from 'vue-router';
 import { ref, watch, onMounted, onBeforeMount, getCurrentInstance } from 'vue'
-import url from './../../../db/db'
+import url  from './../../../db/db'
 // 调用axios，使用全局的axios
 const internalInstance = getCurrentInstance();
 const axios = internalInstance.appContext.config.globalProperties.$axios;
@@ -21,14 +21,14 @@ const cd = ref()
 
 
 let time = ref()
-console.log(url.al(222222))
 
-
+// console.log(url.url());
 // 这里由子组件发来的进行岗位的筛查
 const list = (params) => {
     listshuju.value = params[0]
 }
 
+// console.log(url.url)
 
 
 
@@ -41,7 +41,7 @@ const getChildInfo = (params) => {
 
 // 子组件用来提醒更新数据
 const update_Data = (params) => {
-    axios.get('http://htyg.bbqll.xyz/data?id=' + route.params.id)
+    axios.get(url.url + '/data?id=' + route.params.id)
         .then((response) => {
             // 更新数据
             time.value = response.data
@@ -54,8 +54,7 @@ const update_Data = (params) => {
         })
 }
 
-const a = () => { 
-        
+
 
 
 const postFontSize = ref(1)
@@ -69,12 +68,12 @@ watch(
 
 // 注册一个回调函数，在组件挂载完成后执行。
 onMounted(() => {
-    console.log('举例来说，mounted 钩子可以用来在组件完成初始渲染并创建 DOM 节点后运行代码');
-    console.log(route.params.id);
+    // console.log('举例来说，mounted 钩子可以用来在组件完成初始渲染并创建 DOM 节点后运行代码');
+    // console.log(route.params.id);
     time.value = [
 
     ]
-    axios.get('http://htyg.bbqll.xyz/data?id=' + route.params.id,)
+    axios.get(url.url + '/data?id=' + route.params.id,)
         .then(function (response) {
             // 处理成功情况
             time.value = response.data
@@ -88,13 +87,13 @@ onMounted(() => {
         });
 })
 // 注册一个钩子，在组件被挂载之前被调用。
-onBeforeMount(() => {
-    console.log('注册一个钩子，在组件被挂载之前被调用。');
-    if (route.params.id) {
+// onBeforeMount(() => {
+//     // console.log('注册一个钩子，在组件被挂载之前被调用。');
+//     if (route.params.id) {
 
-    }
+//     }
 
-})
+// })
 
 
 
@@ -103,7 +102,7 @@ onBeforeMount(() => {
 // 监听路由来更新数据
 watch(() => route.params.id, () => {
     time.value = []
-    axios.get('http://htyg.bbqll.xyz/data?id=' + route.params.id,)
+    axios.get(url.url + '/data?id=' + route.params.id,)
         .then(function (response) {
             // 处理成功情况
             time.value = response.data
