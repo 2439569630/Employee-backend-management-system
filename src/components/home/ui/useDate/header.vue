@@ -109,9 +109,9 @@ const complete = () => {
     })
     // console.log('state:' + state)
     if (state) {
-        const url = url.url + '/adddata?'
-        const data = 'name=' + name + '&sex= ' + sex + '&birthday=' + birthday + '&poid=' + poid + '&seid=' + seid + '&textarea=' + textarea
-        axios.get(url + data)
+        let l = url.url + '/adddata?'
+        let data = 'name=' + name + '&sex= ' + sex + '&birthday=' + birthday + '&poid=' + poid + '&seid=' + seid + '&textarea=' + textarea
+        axios.get(l + data)
             .then((res) => {
                 ElMessage({
                     type: 'success',
