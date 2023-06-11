@@ -1,6 +1,6 @@
 # 员工后台管理系统
 
-后端地址配置在src\db\db.ts
+后端地址配置在src\db\db.ts文件
 
 ## Recommended IDE Setup
 
