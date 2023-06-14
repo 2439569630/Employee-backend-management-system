@@ -1,28 +1,24 @@
 # 员工后台管理系统
 
-后端地址配置在src\db\db.ts
+后端地址配置在src\db\db.ts文件
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Customize configuration
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## 项目启动
+### 1、下载依赖命令
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 2、项目启动
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### 生产环境时
 
 ```sh
 npm run build
