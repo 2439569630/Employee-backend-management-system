@@ -1,6 +1,8 @@
 <template>
   <div class="body">
-    <el-table :data="tableData" scrollbar-always-on height="100%" show-header stripe style="width: 100%">
+    <el-table :data="tableData" scrollbar-always-on height="100%" show-header stripe style="width: 100%"
+    v-loading="loading"
+    >
       <el-table-column prop="id" label="id" />
       <el-table-column prop="name" label="姓名" />
       <el-table-column prop="sex" label="性别" />
@@ -66,6 +68,9 @@ import { objectPick } from '@vueuse/shared';
 import { ElLoading } from 'element-plus'
 import urlconfig from './../../../../db/db'
 
+// 加载动画
+const loading = ref()
+
 
 // 接收父组件的内容
 const props = defineProps({
@@ -82,7 +87,10 @@ const props = defineProps({
   search_for: {
     type: [Number, String, Object],
     default: 0
-
+  },
+  loadingState: {
+    type: [Number, String], 	
+    default: '',
   }
 })
 
@@ -95,6 +103,7 @@ const emit = defineEmits(['update'])
 
 
 const complete = () => {
+  loading.value = true
   const requiredFields = ['id', 'name', 'region', 'birthday'];
   const requiredFieldsNotEmpty = requiredFields.every(field => dialogFormVisibleData[field] !== '' && dialogFormVisibleData[field] !== null);
   if (requiredFieldsNotEmpty) {
@@ -227,6 +236,7 @@ const handleDelete = (id) => {
     }
   )
     .then(() => {
+      loading.value = true
       axios.get(urlconfig.url + '/delete?delete=' + id.id)
         .then((response) => {
           // 删除成功响应
@@ -254,6 +264,18 @@ const handleDelete = (id) => {
 
 }
 
+watch(
+  () => props.loadingState,
+  (newVal) => {
+    // 加载中
+    if (newVal === true) {
+      loading.value = true
+    }
+    else {
+      loading.value = false
+    }
+  }
+)
 
 
 
@@ -343,6 +365,8 @@ watch(
     }
   }
 )
+
+
 
 
 

@@ -1,6 +1,6 @@
 <template>
     <component @clickChild="getChildInfo" @update="update_Data" @tabulation="list"></component>
-    <bodydata :msg="time" @update="update_Data" :search_for="cd" :post="listshuju"></bodydata>
+    <bodydata :msg="time" @update="update_Data" :loadingState="loadingState" :search_for="cd" :post="listshuju"></bodydata>
 </template>
 <script setup>
 import component from './useDate/header.vue'
@@ -18,6 +18,8 @@ const routeParams = ref(route.params)
 const listshuju = ref()
 // 记录要搜索的内容
 const cd = ref()
+// 决定子组件的loading状态
+const loadingState = ref()
 
 
 let time = ref()
@@ -41,10 +43,12 @@ const getChildInfo = (params) => {
 
 // 子组件用来提醒更新数据
 const update_Data = (params) => {
+    loadingState.value = true
     axios.get(url.url + '/data?id=' + route.params.id)
         .then((response) => {
             // 更新数据
             time.value = response.data
+            loadingState.value = false
         })
         .catch((error) => {
             ElMessage({
@@ -56,26 +60,15 @@ const update_Data = (params) => {
 
 
 
-
-const postFontSize = ref(1)
-watch(
-    () => postFontSize,
-    (newVal, nonull) => {
-        console.log(newVal);
-        console.log(nonull);
-    }
-)
-
 // 注册一个回调函数，在组件挂载完成后执行。
 onMounted(() => {
-    // console.log('举例来说，mounted 钩子可以用来在组件完成初始渲染并创建 DOM 节点后运行代码');
     // console.log(route.params.id);
-    time.value = [
-
-    ]
+    loadingState.value = true; // 加载中
+    time.value = []
     axios.get(url.url + '/data?id=' + route.params.id,)
         .then(function (response) {
             // 处理成功情况
+            loadingState.value = false; // 加载结束，显示加载中的状态。 
             time.value = response.data
         })
         .catch(function (error) {
@@ -86,34 +79,22 @@ onMounted(() => {
             // 总是会执行
         });
 })
-// 注册一个钩子，在组件被挂载之前被调用。
-// onBeforeMount(() => {
-//     // console.log('注册一个钩子，在组件被挂载之前被调用。');
-//     if (route.params.id) {
-
-//     }
-
-// })
-
-
-
 
 
 // 监听路由来更新数据
 watch(() => route.params.id, () => {
+    loadingState.value = true
     time.value = []
     axios.get(url.url + '/data?id=' + route.params.id,)
         .then(function (response) {
             // 处理成功情况
+            loadingState.value = false
             time.value = response.data
         })
         .catch(function (error) {
             // 处理错误情况
             console.log(error);
         })
-
-
-
     // console.log(time.msg);
 })
 

@@ -5,7 +5,10 @@
         background-color="#545c64"
         class="el-menu-vertical-demo width"
         default-active="2"
-        text-color="#fff" 
+        text-color="#fff"
+        v-loading="loading"
+        element-loading-background="rgba(122, 122, 122, 0.8)"
+        element-loading-text="加载中..."
       >
         <el-sub-menu :index=iten.id.toString() v-for="iten in data">
           <template #title>
@@ -19,11 +22,14 @@
     </el-col>
   </el-row>
 </template>
-<script setup>
+<script  setup>
 import router from '../../../router';
 import {ref, getCurrentInstance, onMounted} from 'vue'
 import { reactify } from '@vueuse/shared';
-import url from './../../../db/db'
+import url from './../../../db/db' 
+// 加载动画
+const loading = ref(true)
+
 // 调用axios，使用全局的axios
 const internalInstance = getCurrentInstance();
 const axios = internalInstance.appContext.config.globalProperties.$axios;
@@ -34,7 +40,15 @@ onMounted(() => {
         .then(function (response) {
             // 处理成功情况
             // console.log(response.data);
-            data.value = response.data
+            console.dir(response)
+            if (response.status === 200) {
+              data.value = response.data
+              loading.value = false
+            }
+            else {
+              // 抛出一个异常
+              console.error('获取数据失败!');
+            }
         })
         .catch(function (error) {
             // 处理错误情况
