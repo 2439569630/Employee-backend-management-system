@@ -34,6 +34,7 @@
                 名称: ${res.data.name}<br>
                 登录时间：${res.data.loginTime}<br>
                 登录地点：${res.data.loginLocation}<br>
+                ip地址：${res.data.ip}<br>
                 登录设备：${res.data.loginDevice}
                 `,
                 type: 'warning',
