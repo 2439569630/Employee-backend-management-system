@@ -32,7 +32,7 @@
                 title: '上一次登录',
                 message: `
                 名称: ${res.data.name}<br>
-                登录数据：${res.data.loginTime}<br>
+                登录时间：${res.data.loginTime}<br>
                 登录地点：${res.data.loginLocation}<br>
                 登录设备：${res.data.loginDevice}
                 `,
