@@ -15,5 +15,9 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     open: true
-  }
+  },
+  optimizeDeps: {
+    include: ['axios-cookiejar-support']
+  },
+  
 })

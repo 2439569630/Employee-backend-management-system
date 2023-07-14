@@ -4,12 +4,25 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
 import router from './router/index'
+
+
+// 管理cookie
 import axios from 'axios';
+
+const instance = axios.create({
+    withCredentials: true,
+})
+axios.defaults.withCredentials = true
+// import getKey from './db/RSA/RSA';
+// // 获取公钥
+// getKey()
+
 const app = createApp(App)
-app.config.globalProperties.$axios = axios;
+app.config.globalProperties.$axios = instance;
 app.use(router)
 // app.use(ElementPlus)
 app.use(ElementPlus, {
     locale: zhCn,
 })
 app.mount('#app')
+

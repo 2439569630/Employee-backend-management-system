@@ -23,24 +23,24 @@
         background-color: #333333;
         position: fixed;
         top: 0;
-        left: 0;
+        left: 12vw;
         right: 0;
 
     }
     .left {
         position: fixed;
-        top: 10vh;
+        top: 0;
         bottom: 0;
         left: 0;
-        width: 20vw;
+        width: 12vw;
         height: 90vw;
-        background-color: #333333;
+        /* background-color: #333333; */
         overflow-y: auto;
     }
     .data {
         position: fixed;
         top: 10vh;
-        left: 20vw;
+        left: 12vw;
         right: 0;
         bottom: 0;
         background-color: #F5F5F5;

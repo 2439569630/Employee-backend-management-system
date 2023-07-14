@@ -89,7 +89,7 @@ const props = defineProps({
     default: 0
   },
   loadingState: {
-    type: [Number, String], 	
+    type: [Number, String, Boolean], 	
     default: '',
   }
 })

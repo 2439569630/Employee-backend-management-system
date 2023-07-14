@@ -6,6 +6,9 @@ const ipORdomainNAME = (host,port) => {
     }else if(expression_domain_name.test(host)){
         return 'http://' + host
     }
+    else if(host === 'localhost'){
+        return 'http://' + host
+    }
     else{
         throw new Error('ip地址或者域名配置错误')
     }
