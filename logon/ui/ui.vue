@@ -6,19 +6,20 @@
             </div>
             <div class="button">
                 <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
-                :size="formSize" status-icon>
-                <el-form-item label="账号" prop="name">
-                    <el-input v-model="ruleForm.name" />
-                </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="ruleForm.password" show-password />
-                </el-form-item>
-                <el-form-item>
-                    <el-button  type="primary" size="large" :disabled="buttonstate.state" class="widht" @click="submitForm(ruleFormRef)">
-                        {{ buttonstate.txt }}
-                    </el-button>
-                </el-form-item>
-            </el-form>
+                    :size="formSize" status-icon>
+                    <el-form-item label="账号" prop="name">
+                        <el-input v-model="ruleForm.name" />
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                        <el-input v-model="ruleForm.password" show-password />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" size="large" :disabled="buttonstate.state" class="widht"
+                            @click="submitForm(ruleFormRef)">
+                            {{ buttonstate.txt }}
+                        </el-button>
+                    </el-form-item>
+                </el-form>
             </div>
         </div>
     </div>
@@ -44,7 +45,7 @@ const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
     name: '',
-    password: '', 
+    password: '',
 })
 // buttonstate 按钮的登录状态
 const buttonstate = reactive({
@@ -66,50 +67,69 @@ const rules = reactive<FormRules>({
         // zlib: { // 验证码 （提高验证速度） （验证码不是必需的，但可以选
     ]
 })
-
-const submitForm = async (formEl: FormInstance | undefined) => {
+/**
+ * 监听键盘事件，当用户按下回车键时提交表单。
+ */
+document.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        // 按下了回车键
+        submitForm(ruleFormRef.value)
+    }
+})
+/**
+ * 提交表单。
+ * @param {FormInstance | undefined} formEl - 表单实例。
+ */
+const submitForm = async (formEl) => {
+    // 清除 session-id cookie
     document.cookie = 'session-id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+
+    // 检查表单实例是否存在
     if (!formEl) return
+
+    // 验证表单
     await formEl.validate((valid, fields) => {
-        if (valid) {    
-            // 验证成功将按钮状态更改。
+        if (valid) {
+            // 验证成功，更新按钮状态
             buttonstate.state = true
             buttonstate.txt = '登录中'
+
+            // 发送登录请求
             instance.post(db.url + '/ues/logon', {
                 uesname: ruleForm.name,
                 password: ruleForm.password
-            }
-            ,{
-                // withCredentials: true,
+            }, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
-            }
-            )
-            .then(res => {
-                if (res.status === 200) {
+            })
+                .then(res => {
+                    if (res.status === 200) {
+                        // 登录成功，更新按钮状态并显示提示信息
+                        buttonstate.state = false
+                        buttonstate.txt = '登录'
+                        ElMessage({
+                            duration: 1000,
+                            showClose: true,
+                            message: res.data.msg,
+                            type: 'success',
+                        })
+                        // 跳转到 uesdata 页面
+                        router.push('/uesdata')
+                    }
+                })
+                .catch(err => {
+                    // 登录失败，更新按钮状态并显示错误信息
                     buttonstate.state = false
                     buttonstate.txt = '登录'
                     ElMessage({
-                        duration: 1000,
                         showClose: true,
-                        message: res.data.msg,
-                        type: 'success',
+                        message: err.response.data,
+                        type: 'error',
                     })
-                    router.push('/uesdata')
-                }
-            })
-            .catch(err => {
-                buttonstate.state = false
-                buttonstate.txt = '登录'
-                ElMessage({
-                    showClose: true,
-                    message: err.response.data,
-                    type: 'error',
                 })
-            })
         } else {
-            
+            // 验证失败，不执行任何操作
         }
     })
 }
@@ -118,36 +138,39 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 
 
+
 </script>
 
-<style scoped>  
-.box {
-    height: 100vh;
-    background-color: #444;
-    /* position: fixed; */
-}
+<style scoped>  .box {
+      height: 100vh;
+      background-color: #444;
+      /* position: fixed; */
+  }
 
-.body {
-    width: 35vw;
-    height: 45vh;
-    background-color: #fff;
-    position: fixed;
-    margin: auto;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    /* padding-right: 5%; */
-}
-h1 {
-    text-align: center;
-    /* margin-left: 20%; */
-}
-.widht {
-    width: 100%;
-}
-.button {
-    width: 90%;
-    height: 90%;
-}
+  .body {
+      width: 35vw;
+      height: 45vh;
+      background-color: #fff;
+      position: fixed;
+      margin: auto;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      /* padding-right: 5%; */
+  }
+
+  h1 {
+      text-align: center;
+      /* margin-left: 20%; */
+  }
+
+  .widht {
+      width: 100%;
+  }
+
+  .button {
+      width: 90%;
+      height: 90%;
+  }
 </style>

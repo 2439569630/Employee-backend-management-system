@@ -39,7 +39,7 @@
                 `,
                 type: 'warning',
                 position: 'bottom-right',
-                duration: 0,
+                duration: 5000,
                 dangerouslyUseHTMLString: true,
                 customClass: 'mynotification'
             })
@@ -52,7 +52,7 @@
 <style>
 .mynotification {
         width: 500px;
-        height: 200px;
+        height: auto;
         overflow: auto;
 }
 </style>
