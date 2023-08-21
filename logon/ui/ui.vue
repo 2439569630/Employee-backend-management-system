@@ -44,8 +44,8 @@ const instance = internalInstance.appContext.config.globalProperties.$axios;
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
-    name: '',
-    password: '',
+    name: '789456123',
+    password: '123456789',
 })
 // buttonstate 按钮的登录状态
 const buttonstate = reactive({

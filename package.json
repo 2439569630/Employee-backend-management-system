@@ -2,8 +2,8 @@
   "name": "app",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
@@ -11,12 +11,15 @@
     "buffer": "^6.0.3",
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
+    "echarts": "^5.4.3",
     "element-plus": "^2.3.4",
+    "pinia": "^2.1.4",
     "vue": "^3.2.37",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.1",
-    "vite": "^3.0.1"
+    "vite": "^3.0.1",
+    "vue-cli-plugin-pinia": "~0.2.4"
   }
 }

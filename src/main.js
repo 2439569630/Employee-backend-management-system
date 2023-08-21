@@ -9,15 +9,15 @@ import router from './router/index'
 // 管理cookie
 import axios from 'axios';
 
+import { createPinia } from 'pinia'
+
 const instance = axios.create({
     withCredentials: true,
 })
 axios.defaults.withCredentials = true
-// import getKey from './db/RSA/RSA';
-// // 获取公钥
-// getKey()
 
-const app = createApp(App)
+
+const app = createApp(App).use(createPinia())
 app.config.globalProperties.$axios = instance;
 app.use(router)
 // app.use(ElementPlus)
