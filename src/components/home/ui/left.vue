@@ -64,7 +64,7 @@ const loading = ref(true)
 
 // 调用axios，使用全局的axios
 const internalInstance = getCurrentInstance();
-const instance = internalInstance.appContext.config.globalProperties.$axios;
+const axios = internalInstance.appContext.config.globalProperties.$axios;
 
 
 
@@ -164,7 +164,7 @@ const handleMenuItemClick = (path)=> {
 const data = ref([])
 // 注册一个回调函数，在组件挂载完成后执行。
 onMounted(() => {
-  instance.get(url.url + '/list')
+  axios.get(url.url + '/list')
     .then(function (response) {
       // 处理成功情况
       // console.log(response.data);
@@ -185,9 +185,8 @@ onMounted(() => {
       // 总是会执行
     });
 
-  instance.get(url.url + '/ues/logon/uesrdata')
+    axios.get(url.url + '/ues/logon/uesrdata')
     .then(res => {
-      console.log(res.data)
       usestore.name = res.data.uesrdata.name
       usestore.limitsOfAuthority = res.data.uesrdata.permission
     })
@@ -209,7 +208,7 @@ const click = (i) => {
  * 这个方法用于用户退出。
  */
 const logonExit = () => {
-  instance.get(url.url + '/ues/logon/exit')
+  axios.get(url.url + '/ues/logon/exit')
     .then(res => {
     })
     .catch(error => console.error(error))

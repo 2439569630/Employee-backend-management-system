@@ -9,7 +9,6 @@
 import router from './../../../../../router';
 import { onUnmounted } from 'vue'
 import { useSwitchingOFcomponentsStatus } from './../pinia/bodyView'
-import { set } from '@vueuse/shared';
 const store = useSwitchingOFcomponentsStatus()
 
 

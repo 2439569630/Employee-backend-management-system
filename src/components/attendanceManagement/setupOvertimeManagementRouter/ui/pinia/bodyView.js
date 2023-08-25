@@ -12,3 +12,27 @@ export const useSwitchingOFcomponentsStatus = defineStore('useSwitching',{
         }
     },
 })
+
+/**
+ * 存放表格状态
+ * Store table status
+ */
+export const useTableStatus = defineStore('useTableStatus',{
+    state: () => {
+        return {
+            data: [], // 当前页数据
+        }
+    }
+})
+/**
+ * 存放分页状态 
+ */
+export const usePagingStatus = defineStore('usePagingStatus',{
+    state: () => {
+        return {
+            total_rows: 0, // 总行数
+            page: 1, // 当前页
+            rows: 20, // 每页行数
+        }
+    }
+})

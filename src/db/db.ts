@@ -8,7 +8,6 @@ const server: { host: string,port: number } = {
 }
 
 const url = count.ipORdomainNAME(server.host, server.port)
-console.log(url);
 
 
 export default {

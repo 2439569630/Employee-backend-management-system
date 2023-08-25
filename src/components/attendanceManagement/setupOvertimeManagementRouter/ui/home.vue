@@ -29,6 +29,7 @@ const store = useSwitchingOFcomponentsStatus()
         margin-top: 10px;
         display: flex;
         flex-direction: column;
+        overflow-x: auto;
     }
     .top {
         width: 100%;
