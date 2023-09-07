@@ -20,7 +20,6 @@ const instance = axios.create({
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = serverStore.url; // 修改为你的后台地址
 
-console.log(serverStore.url)
 
 
 app.config.globalProperties.$axios = instance;

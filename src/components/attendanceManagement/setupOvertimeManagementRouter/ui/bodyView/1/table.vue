@@ -1,21 +1,20 @@
 <template>
-    <el-table :data="tableStore.data" align="center" :max-height="props.tableDataHeight" :table-layout="tableLayout">
+    <el-table :data="tableStore.data"  align="center" :max-height="props.tableDataHeight" :table-layout="tableLayout">
         <el-table-column prop="id" label="序号" align="center" width="60" />
         <el-table-column prop="employee_name" label="加班人" />
         <el-table-column prop="overtime_reason" label="加班原由" />
-        <el-table-column prop="start_time" label="开始时间" />
+        <el-table-column  prop="start_time" label="开始时间" />
         <el-table-column prop="end_time" label="结束时间" />
         <el-table-column prop="overtime_hours" label="加班小时数" />
         <el-table-column prop="hourly_overtime_pay" label="每小时加班费" />
         <el-table-column prop="overtime_cost" label="加班费用" />
-        <el-table-column prop="name" label="详情" fixed="right" width="120">
-        </el-table-column>
+        <!-- <el-table-column prop="name" label="详情" fixed="right" width="120" /> -->
     </el-table>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch, onMounted, } from 'vue'
-import { useTableStatus } from './../../pinia/bodyView'
+import { useTableStatus } from './../../pinia/useTableStatus'
 const tableStore = useTableStatus()
 
 
@@ -71,3 +70,4 @@ const tableLayout = ref('auto')// 设置表格单元、行和列的布局方式f
 
 
 </script>
+../../pinia/useSwitchingOFcomponentsStatus

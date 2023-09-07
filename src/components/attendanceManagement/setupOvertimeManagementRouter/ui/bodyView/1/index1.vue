@@ -2,7 +2,7 @@
     <div id="box">
         <!-- 搜索模块 -->
         <div class="top">
-            搜索模块
+            <searchFor></searchFor>
         </div>
         <!-- 表格模块 -->
         <div class="box" id="dataTable">
@@ -20,6 +20,8 @@ import { onMounted, ref, onBeforeUnmount } from 'vue'
 import { ElMessage } from 'element-plus'
 import dataTable from './table.vue'
 import Pagination from './Pagination.vue'
+// 异步导入组件
+import searchFor from './searchFor.vue'
 // 导入通用防抖函数
 import { Debounce } from './../../../../../../Universalfunction/debounce'
 const form = ref({

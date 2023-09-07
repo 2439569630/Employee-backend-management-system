@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 import router from './../../../../../router';
 import { onUnmounted } from 'vue'
-import { useSwitchingOFcomponentsStatus } from './../pinia/bodyView'
+import { useSwitchingOFcomponentsStatus } from './../pinia/useSwitchingOFcomponentsStatus'
 const store = useSwitchingOFcomponentsStatus()
 
 
@@ -31,4 +31,4 @@ onUnmounted(() => {
 
 
 
-</script>
+</script>../pinia/useSwitchingOFcomponentsStatus

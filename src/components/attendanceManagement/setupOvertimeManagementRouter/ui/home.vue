@@ -11,7 +11,7 @@
 </template>
 <script setup>
 import top from './top/top.vue'
-import { useSwitchingOFcomponentsStatus } from './pinia/bodyView'
+import { useSwitchingOFcomponentsStatus } from './pinia/useSwitchingOFcomponentsStatus'
 import index1 from './bodyView/1/index1.vue'
 import index2 from './bodyView/2/index2.vue'
 const store = useSwitchingOFcomponentsStatus()
@@ -41,4 +41,4 @@ const store = useSwitchingOFcomponentsStatus()
         width: 100%;
         height: calc(100% - 58.4px);
     }
-</style>
+</style>./pinia/useSwitchingOFcomponentsStatus
