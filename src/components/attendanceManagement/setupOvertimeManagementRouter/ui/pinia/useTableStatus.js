@@ -50,21 +50,30 @@ export const useTableStatus = defineStore('useTableStatus', {
                 // 获取页码和行数
                 const page = pagingStatus.page;
                 const rows = pagingStatus.rows;
-                const response = await axios.post('/overtime/overtimeManagement/searchName', {
-                    name: this.searchValue,
-                    page: page,
-                    rows: rows,
-                });
+                const response = await new Promise((resolve, reject) => {
+                    axios.post('/overtime/overtimeManagement/searchName', {
+                        name: this.searchValue,
+                        page: page,
+                        rows: rows,
+                    })
+                    .then((response) => {
+                        resolve(response.data)
+                    })
+                    .catch((error) => {
+                        reject(error)
+                    })
+                })
 
+                
                 // 更新表格状态
                 this.useTableStatus({
-                    data: response.data.data
+                    data: response.dataRows
                 });
 
                 // 更新分页状态
                 pagingStatus.updatePagingStatus({
                     page: page,
-                    total_rows: response.data.total_rows
+                    total_rows: response.totalRows
                 });
             } catch (error) {
                 console.error(error);
@@ -98,7 +107,6 @@ export const useTableStatus = defineStore('useTableStatus', {
                         rows: pagingStatus.rows
                     })
                         .then((response) => {
-                            console.log(response.data)
                             resolve(response.data);
                         })
                         .catch((error) => {

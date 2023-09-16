@@ -4,12 +4,16 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
 import router from './router/index'
+import 'default-passive-events' // 解决谷歌浏览器警告
 // 管理cookie
 import axios from 'axios';
 
 import { createPinia } from 'pinia'
 const app = createApp(App).use(createPinia())
-
+// 加载全局配置
+import { useConfig } from '@config'
+const config = useConfig()
+config.updateWidthAndHeight()
 import { useServerStore } from './db/db.pinia'
 const serverStore = useServerStore()
 
@@ -29,4 +33,6 @@ app.use(ElementPlus, {
     locale: zhCn,
 })
 app.mount('#app')
+
+
 

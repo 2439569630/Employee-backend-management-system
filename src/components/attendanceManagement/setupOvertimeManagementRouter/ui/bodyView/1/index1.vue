@@ -51,10 +51,10 @@ class Resize {
     /**
      * 回调函数，用于处理窗口大小变化事件
      */
-    public resizeHandler = function () {
+    public resizeHandler =  () => {
         // 防抖
         this.debounce.debounce(() => {
-            this.getTableHeight(this.debounce) // 获取元素的宽高
+            this.getTableHeight() // 获取元素的宽高
             dataTableHeight.value = this.height // 把高度传递给子组件
             dataTableWidth.value = this.width // 把宽度传递给子组件
         }, this.time);

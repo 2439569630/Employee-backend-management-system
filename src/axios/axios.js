@@ -24,42 +24,31 @@ console.log(serverStore.url)
  */
 axiosInstance.interceptors.response.use(
     (response) => {
-        // console.log('响应拦截器', response);
-        return response;
+      // console.log('响应拦截器', response);
+      return response;
     },
-    (error) => {
+    async (error) => {
+      try {
         // 处理响应错误
         // 判断是否登录，登录失效时，跳转到登录页面
-        if (error.response.data.message == '请登录') {
-            router.push('/logon')
-            router.push('/logon')
-            .then(() => {
-                // 提示登录失效 element-ui
-                ElMessage({
-                    message: error.response.data.message,
-                    grouping: true,
-                    type: 'error',
-                })
-            })
-            .catch(() => {
-                // 提示登录失效 element-ui
-                // 如果跳转失败则刷新页面
-                
-                ElMessage({
-                    message: error.response.data.message,
-                    grouping: true,
-                    type: 'error',
-                })
-                router.push('/logon')
-            })
-            // .finally(() => {
-            //     router.push('/logon')
-            // })
-            
+        if (error.response.data.message === '请登录') {
+          await router.push('/logon');
+          // 显示登录失效消息
+          ElMessage({
+            message: '请登录',
+            grouping: true,
+            type: 'error',
+          });
         }
         return Promise.reject(error);
+      } catch (err) {
+        // 处理捕获的异常
+        console.error('拦截器异常:', err);
+        return Promise.reject(err);
+      }
     }
-);
+  );
+  
 
 
 export default axiosInstance;

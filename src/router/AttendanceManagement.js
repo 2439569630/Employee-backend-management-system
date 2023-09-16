@@ -30,7 +30,7 @@ const setupAttendanceManagementRouter = {
                     path: '',
                     components: {
                         top: () => import('./../components/home/ui/head.vue'),
-                        body: () => import('./../components/home/ui/useDate.vue')
+                        // body: () => import('./../components/home/ui/useDate.vue')
                     }
                 }
             ]

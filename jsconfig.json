@@ -18,12 +18,18 @@
         // ++ 这里加上baseUrl 和 path即可 ++
         "baseUrl": "./",
         "paths": {
+            "@": [
+                "src"
+            ],
             // 根据别名配置相关路径
             "@axios/*": [
                 "src/axios/*"
             ],
             "@router/*": [
                 "src/router/*"
+            ],
+            "@config": [
+                "src/store/config.js"
             ],
         }
         },

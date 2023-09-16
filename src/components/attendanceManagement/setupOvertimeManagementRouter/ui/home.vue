@@ -4,8 +4,8 @@
             <top />
         </div>
         <div class="body">
-            <index1 v-if="store.index === '1'"></index1>
-            <index2 v-else-if="store.index === '2'"></index2>
+            <index1 v-show="store.index === '1'"></index1>
+            <index2 v-show="store.index === '2'"></index2>
         </div>
     </div>
 </template>
@@ -29,7 +29,6 @@ const store = useSwitchingOFcomponentsStatus()
         margin-top: 10px;
         display: flex;
         flex-direction: column;
-        overflow-x: auto;
     }
     .top {
         width: 100%;
@@ -41,4 +40,4 @@ const store = useSwitchingOFcomponentsStatus()
         width: 100%;
         height: calc(100% - 58.4px);
     }
-</style>./pinia/useSwitchingOFcomponentsStatus
+</style>

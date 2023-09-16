@@ -1,11 +1,16 @@
 <template>
-  <div  class="max">
-    <router-view></router-view>
-</div>
+  <div class="max">
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
+  </div>
 </template>
 
-<script setup>
 
+
+<script setup>
 </script>
 <style>
   /* .max {

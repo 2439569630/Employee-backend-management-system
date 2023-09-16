@@ -89,6 +89,5 @@ onBeforeMount(() => {
     position: fixed;
     left: 12vw;
     background-color: #D3D3D3;
-    overflow-y: auto;
 }
 </style>
