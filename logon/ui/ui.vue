@@ -7,8 +7,9 @@
     </div>
     <!-- PE -->
     <div v-show="config.isMobile === true">
-
+        
     </div>
+    <!-- pad -->
 </template>
 
 <script setup>

@@ -13,7 +13,7 @@ const app = createApp(App).use(createPinia())
 // 加载全局配置
 import { useConfig } from '@config'
 const config = useConfig()
-config.updateWidthAndHeight()
+config.updateWidthAndHeight() // 更新窗口大小
 import { useServerStore } from './db/db.pinia'
 const serverStore = useServerStore()
 

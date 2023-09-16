@@ -41,6 +41,8 @@ export const useConfig = defineStore('config', {
                 debounce.debounce(() => {
                     this.width = window.innerWidth;
                     this.height = window.innerHeight;
+                    // 判断当前设备类型
+                    this.judgeDeviceType();
                 }, 1000);
             }
             // 初始化一次
@@ -50,6 +52,38 @@ export const useConfig = defineStore('config', {
             this.useConfig({
                 isResizeListenerAdded: true
             })
+        },
+        /**
+         * 判断当前设备类型
+         */
+        judgeDeviceType: function () {
+            // 判断是否是移动端
+            console.log(this.width)
+            
+            if (this.width < 768) {
+                this.useConfig({
+                    isMobile: true,
+                    isTablet: false,
+                    isDesktop: false
+                })
+            }
+            // 判断是否是平板
+            // 目前没有平板，所以这里平板直接使用桌面端的布局
+            else if (this.width >= 768 && this.width < 992) {
+                this.useConfig({
+                    isMobile: false,
+                    isTablet: true,
+                    isDesktop: true
+                })
+            }
+            // 判断是否是桌面端
+            else {
+                this.useConfig({
+                    isMobile: false,
+                    isTablet: false,
+                    isDesktop: true
+                })
+            }
         }
     }
 })
